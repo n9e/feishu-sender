@@ -1,4 +1,4 @@
-module github.com/weizhenqian/sms-sender
+module github.com/weizhenqian/im-sender
 
 go 1.14
 
