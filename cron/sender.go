@@ -7,6 +7,7 @@ import (
 
 	"github.com/toolkits/net/httplib"
 	"github.com/toolkits/pkg/logger"
+	"github.com/weizhenqian/im-sender/certification"
 	"github.com/weizhenqian/im-sender/config"
 	"github.com/weizhenqian/im-sender/dataobj"
 	"github.com/weizhenqian/im-sender/redisc"
@@ -14,7 +15,7 @@ import (
 
 var semaphore chan int
 
-func SendVoices() {
+func SendIms() {
 	c := config.Get()
 
 	//定义发送限制
@@ -27,19 +28,19 @@ func SendVoices() {
 			continue
 		}
 		//读取到值，则调用sendSmss发送
-		sendVoices(messages)
+		sendIms(messages)
 	}
 }
 
-func sendVoices(messages []*dataobj.Message) {
+func sendIms(messages []*dataobj.Message) {
 	//读取messages的值，获取单个信息，调用sendSms发送
 	for _, message := range messages {
 		semaphore <- 1
-		go sendVoice(message)
+		go sendIm(message)
 	}
 }
 
-func sendVoice(message *dataobj.Message) {
+func sendIm(message *dataobj.Message) {
 	defer func() {
 		<-semaphore
 	}()
@@ -56,8 +57,9 @@ func sendVoice(message *dataobj.Message) {
 	}
 	tos := strings.Replace(strings.Trim(fmt.Sprint(toslist), "[]"), " ", ",", -1)
 	//获取Url的值
-	url := config.Get().Sms.Url
-
+	url := config.Get().Im.Sendurl
+	//获取token
+	token := GetToken()
 	//初始化content
 	content := genContent(message)
 	data := []string{"text": content}
@@ -68,7 +70,7 @@ func sendVoice(message *dataobj.Message) {
 
 	r := httplib.Post(url).SetTimeout(5*time.Second, 30*time.Second)
 	req.Header("Content-Type", "application/json")
-	req.Header("Authorization", "Bearer t-a2b4116b22cc833c06c6476dd76d822133965ab2")
+	req.Header("Authorization", token)
 	r.Param("user_ids", tos)
 	r.Param("msg_type", "text")
 	r.Param("content", data)
