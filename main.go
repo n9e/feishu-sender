@@ -13,9 +13,9 @@ import (
 	"github.com/toolkits/pkg/logger"
 	"github.com/toolkits/pkg/runner"
 
-	"github.com/weizhenqian/sms-sender/config"
-	"github.com/weizhenqian/sms-sender/cron"
-	"github.com/weizhenqian/sms-sender/redisc"
+	"github.com/weizhenqian/im-sender/config"
+	"github.com/weizhenqian/im-sender/cron"
+	"github.com/weizhenqian/im-sender/redisc"
 )
 
 var (
