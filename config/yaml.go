@@ -41,7 +41,7 @@ type consumerSection struct {
 
 type imSection struct {
 	Tokenurl string `yaml:"tokenurl"`
-	Sendurl  string `yaml:"tokenurl"`
+	Sendurl  string `yaml:"sendurl"`
 }
 type appSection struct {
 	Appid  string `yaml:"app_id"`

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 	"time"
+	"encoding/json"
 
 	"github.com/toolkits/net/httplib"
 	"github.com/toolkits/pkg/logger"
@@ -14,6 +15,11 @@ import (
 )
 
 var semaphore chan int
+
+type data struct {
+	x string
+	y string
+}
 
 func SendIms() {
 	c := config.Get()
@@ -55,15 +61,19 @@ func sendIm(message *dataobj.Message) {
 		}
 		toslist = append(toslist, item)
 	}
-	tos := strings.Replace(strings.Trim(fmt.Sprint(toslist), "[]"), " ", ",", -1)
+	tostemp,e := json.Marshal(toslist)
+	if e != nil {
+		panic(e)
+	}
+	tos := fmt.Sprintf("%s", tostemp)
 	//获取Url的值
 	url := config.Get().Im.Sendurl
 	//获取token
 	token := certification.GetToken()
 	//初始化content
 	content := genContent(message)
-	data := map[string]string{"text": content}
-	body := fmt.Sprintf("%v", data) 
+	datatemp := data{"text",content}
+	body := fmt.Sprintf("{%s:%s}", datatemp.x,datatemp.y) 
 	if len(tos) == 0 {
 		logger.Warningf("hashid: %d: tos is empty", message.Event.HashId)
 		return
@@ -75,12 +85,13 @@ func sendIm(message *dataobj.Message) {
 	r.Param("user_ids", tos)
 	r.Param("msg_type", "text")
 	r.Param("content", body)
-	_, err := r.String()
+	str, err := r.String()
 	if err != nil {
-		logger.Warningf("send im fail, tos:%s, cotent:%s, error:%v", tos, content, err)
+		logger.Warningf("send im fail, tos:%s, cotent:%s, error:%v", tos, body, err)
+		logger.Warningf("str:s%",str)
 		return
 	} else {
-		logger.Infof("send im succeed,tos:%s, cotent:%s", tos, content)
+		logger.Infof("send im succeed,tos:%s, cotent:%s", tos, body)
 	}
 }
 
