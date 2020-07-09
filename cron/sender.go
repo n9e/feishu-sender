@@ -27,13 +27,13 @@ func SendIms() {
 			time.Sleep(time.Duration(300) * time.Millisecond)
 			continue
 		}
-		//读取到值，则调用sendSmss发送
+		//读取到值，则调用sendIms发送
 		sendIms(messages)
 	}
 }
 
 func sendIms(messages []*dataobj.Message) {
-	//读取messages的值，获取单个信息，调用sendSms发送
+	//读取messages的值，获取单个信息，调用sendIm发送
 	for _, message := range messages {
 		semaphore <- 1
 		go sendIm(message)
@@ -59,27 +59,28 @@ func sendIm(message *dataobj.Message) {
 	//获取Url的值
 	url := config.Get().Im.Sendurl
 	//获取token
-	token := GetToken()
+	token := certification.GetToken()
 	//初始化content
 	content := genContent(message)
-	data := []string{"text": content}
+	data := map[string]string{"text": content}
+	body := fmt.Sprintf("%v", data) 
 	if len(tos) == 0 {
 		logger.Warningf("hashid: %d: tos is empty", message.Event.HashId)
 		return
 	}
 
 	r := httplib.Post(url).SetTimeout(5*time.Second, 30*time.Second)
-	req.Header("Content-Type", "application/json")
-	req.Header("Authorization", token)
+	r.Header("Content-Type", "application/json")
+	r.Header("Authorization", token)
 	r.Param("user_ids", tos)
 	r.Param("msg_type", "text")
-	r.Param("content", data)
+	r.Param("content", body)
 	_, err := r.String()
 	if err != nil {
-		logger.Warningf("send sms fail, tos:%s, cotent:%s, error:%v", tos, content, err)
+		logger.Warningf("send im fail, tos:%s, cotent:%s, error:%v", tos, content, err)
 		return
 	} else {
-		logger.Infof("send sms succeed,tos:%s, cotent:%s", tos, content)
+		logger.Infof("send im succeed,tos:%s, cotent:%s", tos, content)
 	}
 }
 

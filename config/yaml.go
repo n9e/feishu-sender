@@ -8,7 +8,8 @@ import (
 
 type Config struct {
 	Logger   loggerSection   `yaml:"logger"`
-	Sms      smsSection      `yaml:"sms"`
+	App      appSection      `yaml:"app"`
+	Im	 imSection	 `yaml:"im"`
 	Consumer consumerSection `yaml:"consumer"`
 	Redis    redisSection    `yaml:"redis"`
 }
@@ -38,8 +39,13 @@ type consumerSection struct {
 	Worker int    `yaml:"worker"`
 }
 
-type smsSection struct {
-	Url string `yaml:"url"`
+type imSection struct {
+	Tokenurl string `yaml:"tokenurl"`
+	Sendurl  string `yaml:"tokenurl"`
+}
+type appSection struct {
+	Appid  string `yaml:"app_id"`
+	Appsecret string `yaml:"app_secret"`
 }
 
 var yaml Config

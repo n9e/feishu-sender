@@ -7,7 +7,7 @@ import (
 )
 
 func GetToken() string {
-	addid := config.Get().App.Appid	
+	appid := config.Get().App.Appid	
 	appsecret := config.Get().App.Appsecret
 	url := 	config.Get().Im.Tokenurl
 	req := httplib.Post(url)
@@ -19,6 +19,7 @@ func GetToken() string {
         if err != nil {
                 fmt.Println(err)
         }
-    token := str.(map[string]interface{})["app_access_token"]
-	return token
+    	token := str.(map[string]interface{})["app_access_token"]
+	t := fmt.Sprintf("%v", token)
+	return t
 }

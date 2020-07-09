@@ -59,8 +59,8 @@ func main() {
 	config.InitLogger()
 	redisc.InitRedis()
 
-	fmt.Println("Start SendSms")
-	go cron.SendSmss()
+	fmt.Println("Start SendIm")
+	go cron.SendIms()
 
 	ending()
 }

@@ -1,6 +1,6 @@
 ---
 logger:
-  dir: "logs/sms-sender"
+  dir: "logs/im-sender"
   level: "DEBUG"
   keepHours: 24
 

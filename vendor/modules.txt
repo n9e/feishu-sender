@@ -4,6 +4,9 @@ github.com/BurntSushi/toml
 ## explicit
 github.com/garyburd/redigo/internal
 github.com/garyburd/redigo/redis
+# github.com/toolkits/net v0.0.0-20160910085801-3f39ab6fe3ce
+## explicit
+github.com/toolkits/net/httplib
 # github.com/toolkits/pkg v1.1.1
 ## explicit
 github.com/toolkits/pkg/file
@@ -36,10 +39,8 @@ golang.org/x/tools/internal/semver
 golang.org/x/tools/internal/span
 # gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
 ## explicit
-gopkg.in/alexcesaro/quotedprintable.v3
 # gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 ## explicit
-gopkg.in/gomail.v2
 # gopkg.in/yaml.v2 v2.2.8
 ## explicit
 gopkg.in/yaml.v2
