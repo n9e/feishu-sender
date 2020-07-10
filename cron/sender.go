@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 	"encoding/json"
-
-	"github.com/toolkits/net/httplib"
+	"net/http"
+	"bytes"
 	"github.com/toolkits/pkg/logger"
 	"github.com/weizhenqian/im-sender/certification"
 	"github.com/weizhenqian/im-sender/config"
@@ -15,11 +15,6 @@ import (
 )
 
 var semaphore chan int
-
-type data struct {
-	x string
-	y string
-}
 
 func SendIms() {
 	c := config.Get()
@@ -61,38 +56,33 @@ func sendIm(message *dataobj.Message) {
 		}
 		toslist = append(toslist, item)
 	}
-	tostemp,e := json.Marshal(toslist)
-	if e != nil {
-		panic(e)
-	}
-	tos := fmt.Sprintf("%s", tostemp)
 	//获取Url的值
 	url := config.Get().Im.Sendurl
 	//获取token
 	token := certification.GetToken()
 	//初始化content
 	content := genContent(message)
-	datatemp := data{"text",content}
-	body := fmt.Sprintf("{%s:%s}", datatemp.x,datatemp.y) 
-	if len(tos) == 0 {
+	if len(toslist) == 0 {
 		logger.Warningf("hashid: %d: tos is empty", message.Event.HashId)
 		return
 	}
-
-	r := httplib.Post(url).SetTimeout(5*time.Second, 30*time.Second)
-	r.Header("Content-Type", "application/json")
-	r.Header("Authorization", token)
-	r.Param("user_ids", tos)
-	r.Param("msg_type", "text")
-	r.Param("content", body)
-	str, err := r.String()
+	data := make(map[string]interface{})
+	data["user_ids"] = toslist
+	data["msg_type"] = "text"
+	data["content"] = map[string]string{"text":content}
+	b, _ := json.Marshal(data)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(b))
+	req.Header.Add("Authorization", "Bearer "+token)
+	req.Header.Add("Content-Type", "application/json")
+	client := &http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
-		logger.Warningf("send im fail, tos:%s, cotent:%s, error:%v", tos, body, err)
-		logger.Warningf("str:s%",str)
+		logger.Warningf("send im fail, tos:%s, cotent:%s, error:%v", toslist, content , err)
 		return
 	} else {
-		logger.Infof("send im succeed,tos:%s, cotent:%s", tos, body)
+		logger.Infof("send im succeed,tos:%s, cotent:%s", toslist, content)
 	}
+	defer resp.Body.Close()
 }
 
 var ET = map[string]string{
