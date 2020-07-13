@@ -3,7 +3,7 @@ package certification
 import (
 	"fmt"
 	"github.com/toolkits/net/httplib"
-	"github.com/weizhenqian/im-sender/config"
+	"github.com/weizhenqian/feishu-sender/config"
 )
 
 func GetToken() string {

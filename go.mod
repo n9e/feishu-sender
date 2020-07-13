@@ -1,4 +1,4 @@
-module github.com/weizhenqian/im-sender
+module github.com/weizhenqian/feishu-sender
 
 go 1.14
 

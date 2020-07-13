@@ -6,7 +6,7 @@ import (
 	"github.com/garyburd/redigo/redis"
 	"github.com/toolkits/pkg/logger"
 
-	"github.com/weizhenqian/im-sender/dataobj"
+	"github.com/weizhenqian/feishu-sender/dataobj"
 )
 
 func Pop(count int, queue string) []*dataobj.Message {

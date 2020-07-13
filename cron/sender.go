@@ -8,10 +8,10 @@ import (
 	"net/http"
 	"bytes"
 	"github.com/toolkits/pkg/logger"
-	"github.com/weizhenqian/im-sender/certification"
-	"github.com/weizhenqian/im-sender/config"
-	"github.com/weizhenqian/im-sender/dataobj"
-	"github.com/weizhenqian/im-sender/redisc"
+	"github.com/weizhenqian/feishu-sender/certification"
+	"github.com/weizhenqian/feishu-sender/config"
+	"github.com/weizhenqian/feishu-sender/dataobj"
+	"github.com/weizhenqian/feishu-sender/redisc"
 )
 
 var semaphore chan int
@@ -59,14 +59,18 @@ func sendIm(message *dataobj.Message) {
 	//获取Url的值
 	url := config.Get().Im.Sendurl
 	//获取token
+	//待优化的地方，就是这里，获取token理论可以放入内存包含过期验证。
 	token := certification.GetToken()
 	//初始化content
 	content := genContent(message)
+	//对tos做判断，解决tos为空的情况。
 	if len(toslist) == 0 {
 		logger.Warningf("hashid: %d: tos is empty", message.Event.HashId)
 		return
 	}
+	//飞书的请求体，格式比较特殊，此处曾尝试struct数据类型，失败了。
 	data := make(map[string]interface{})
+	//飞书请求接口，具体数据可以查看url：https://open.feishu.cn/document/ukTMukTMukTM/ucDO1EjL3gTNx4yN4UTM
 	data["user_ids"] = toslist
 	data["msg_type"] = "text"
 	data["content"] = map[string]string{"text":content}

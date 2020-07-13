@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/garyburd/redigo/redis"
-	"github.com/weizhenqian/im-sender/config"
+	"github.com/weizhenqian/feishu-sender/config"
 	"github.com/toolkits/pkg/logger"
 )
 

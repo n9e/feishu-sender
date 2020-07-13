@@ -13,9 +13,9 @@ import (
 	"github.com/toolkits/pkg/logger"
 	"github.com/toolkits/pkg/runner"
 
-	"github.com/weizhenqian/im-sender/config"
-	"github.com/weizhenqian/im-sender/cron"
-	"github.com/weizhenqian/im-sender/redisc"
+	"github.com/weizhenqian/feishu-sender/config"
+	"github.com/weizhenqian/feishu-sender/cron"
+	"github.com/weizhenqian/feishu-sender/redisc"
 )
 
 var (
@@ -84,12 +84,12 @@ func aconf() {
 		return
 	}
 
-	*conf = path.Join(runner.Cwd, "etc", "sms-sender.local.yml")
+	*conf = path.Join(runner.Cwd, "etc", "feishu-sender.local.yml")
 	if file.IsExist(*conf) {
 		return
 	}
 
-	*conf = path.Join(runner.Cwd, "etc", "sms-sender.yml")
+	*conf = path.Join(runner.Cwd, "etc", "feishu-sender.yml")
 	if file.IsExist(*conf) {
 		return
 	}

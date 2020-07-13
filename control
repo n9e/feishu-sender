@@ -1,6 +1,6 @@
 #!/bin/bash
 
-binfile=im-sender
+binfile=feishu-sender
 
 cwd=$(cd $(dirname $0)/; pwd)
 cd $cwd
@@ -85,7 +85,7 @@ reload()
 pack()
 {
 	v=$(date +%Y-%m-%d-%H-%M-%S)
-	tar zcvf $binfile-$v.tar.gz control $binfile etc/im.html etc/im-sender.yml etc/im-sender.service
+	tar zcvf $binfile-$v.tar.gz control $binfile etc/-sender.yml etc/feishu-sender.service
 }
 
 case "$1" in
