@@ -100,10 +100,18 @@ func genContent(message *dataobj.Message) string {
 		content = "[报警已升级]" + content
 	}
 	//此处新增if判断，解决认领报警为空的情况（恢复报警不包含认领报警连接）
-	if message.Event.EventType == "alert" {
-		return fmt.Sprintf("[P%d %s]报警信息:%s; 主机:%s; 触发时间：%s; 报警详情:%s; 认领报警:%s", message.Event.Priority, ET[message.Event.EventType], message.Event.Sname, message.ReadableEndpoint, parseEtime(message.Event.Etime), message.EventLink, message.ClaimLink)
-	} else {
-		return fmt.Sprintf("[P%d %s]报警信息:%s; 主机:%s; 触发时间：%s; 报警详情:%s;", message.Event.Priority, ET[message.Event.EventType], message.Event.Sname, message.ReadableEndpoint, parseEtime(message.Event.Etime), message.EventLink)
+        if message.Event.EventType == "alert" {
+                if message.ReadableTags == "" {
+                         return fmt.Sprintf("[P%d %s] 报警信息：%s;\n监控主机：%s;\n触发时间：%s;\n报警详情：%s;\n认领报警：%s\n", message.Event.Priority, ET[message.Event.EventType], message.Event.Sname, message.ReadableEndpoint, parseEtime(message.Event.Etime), message.EventLink, message.ClaimLink)
+                } else {
+                        return fmt.Sprintf("[P%d %s] 报警信息：%s;\n监控主机：%s;\n简略信息：%s;\n触发时间：%s;\n报警详情：%s;\n认领报警：%s\n", message.Event.Priority, ET[message.Event.EventType], message.Event.Sname, message.ReadableEndpoint, message.ReadableTags,parseEtime(message.Event.Etime), message.EventLink, message.ClaimLink)
+                }
+        } else {
+                if message.ReadableTags == "" {
+                        return fmt.Sprintf("[P%d %s] 报警信息：%s;\n监控主机：%s;\n触发时间：%s;\n", message.Event.Priority, ET[message.Event.EventType], message.Event.Sname, message.ReadableEndpoint, parseEtime(message.Event.Etime))
+                } else {
+                        return fmt.Sprintf("[P%d %s] 报警信息：%s;\n监控主机：%s;\n简略信息：%s;\n触发时间：%s;\n", message.Event.Priority, ET[message.Event.EventType], message.Event.Sname, message.ReadableEndpoint, message.ReadableTags, parseEtime(message.Event.Etime))
+                }
 	}
 }
 
