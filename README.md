@@ -9,6 +9,8 @@ Nightingale的理念，是将告警事件扔到redis里就不管了，接下来�
 发送是基于机器人的方式发送，肯定需要先构建一个机器人。
 具体可以查看飞书介绍文档，在此就不过多赘述了。
 飞书构建机器人：
+https://open.feishu.cn/document/uQjL04CN/ukzM04SOzQjL5MDN
+飞书使用机器人：
 https://open.feishu.cn/document/ukTMukTMukTM/uATM04CMxQjLwEDN
 注：机器人的发送消息API对golang真的特别不友好，请求体的问题困扰了我一整天。
 
@@ -39,10 +41,6 @@ cd feishu-sender
 ```
 
 如上编译完就可以拿到二进制了。
-
-## configuration
-
-读取告警事件，自然要给出redis的连接地址；发送邮件，自然要给出smtp配置；直接修改etc/mail-sender.yml即可
 
 ## pack
 
